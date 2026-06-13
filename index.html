@@ -1,291 +1,630 @@
 <!DOCTYPE html>
-<html lang="es" class="bg-[#f8fafc]">
+<html lang="es" class="scroll-smooth">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Daty - Aventuras que conectan personas</title>
-    <link rel="icon" href="img/logo.png" type="image/png">   
-    <script src="https://cdn.tailwindcss.com"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Daty es una app de actividades, retos y experiencias grupales para reconectar con amigos en el mundo real." />
+  <title>Daty — Actividades que conectan grupos</title>
+  <link rel="icon" href="img/logo.png" type="image/png" />
 
-    <style>
-        html {
-            scroll-behavior: smooth;
-        }
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'ui-sans-serif', 'system-ui', 'Segoe UI', 'Roboto', 'Arial', 'sans-serif'],
+          },
+          colors: {
+            ink: '#08111f',
+            night: '#0f172a',
+            brand: {
+              cyan: '#22d3ee',
+              blue: '#2563eb',
+              violet: '#7c3aed',
+              pink: '#ec4899',
+              lime: '#a3e635',
+            },
+          },
+          boxShadow: {
+            glow: '0 0 60px rgba(34, 211, 238, .25)',
+            card: '0 24px 80px rgba(15, 23, 42, .12)',
+            soft: '0 18px 60px rgba(2, 6, 23, .10)',
+          },
+        },
+      },
+    };
+  </script>
 
-        /* Efectos de texto estilizados */
-        .glow-text-blue {
-            text-shadow: 0 4px 20px rgba(37, 99, 235, 0.15);
-        }
+  <style>
+    :root {
+      --bg: #08111f;
+      --panel: rgba(255, 255, 255, 0.08);
+      --stroke: rgba(255, 255, 255, 0.14);
+    }
 
-        /* ANIMACIÓN DE ENTRADA (SPLASH SCREEN CLARA) */
-        @keyframes fadeOutUp {
-            0% { transform: translateY(0); opacity: 1; visibility: visible; }
-            90% { transform: translateY(-100%); opacity: 1; }
-            100% { transform: translateY(-100%); opacity: 0; visibility: hidden; }
-        }
-        
-        .intro-screen {
-            animation: fadeOutUp 1.2s cubic-bezier(0.85, 0, 0.15, 1) forwards;
-            animation-delay: 1.8s; /* Duración de la pantalla de carga */
-        }
+    * {
+      box-sizing: border-box;
+    }
 
-        @keyframes pulseLogo {
-            0%, 100% { opacity: 0.7; transform: scale(0.98); }
-            50% { opacity: 1; transform: scale(1); }
-        }
-        .pulse-logo {
-            animation: pulseLogo 1.5s ease-in-out infinite;
-        }
-    </style>
+    html {
+      scroll-padding-top: 110px;
+    }
+
+    body {
+      min-height: 100vh;
+      color: #e5eefb;
+      background:
+        radial-gradient(circle at top left, rgba(124, 58, 237, .28), transparent 34rem),
+        radial-gradient(circle at 85% 12%, rgba(34, 211, 238, .22), transparent 30rem),
+        radial-gradient(circle at 35% 100%, rgba(236, 72, 153, .18), transparent 32rem),
+        linear-gradient(180deg, #08111f 0%, #0f172a 42%, #f8fafc 42%, #f8fafc 100%);
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      z-index: -2;
+      pointer-events: none;
+      opacity: .23;
+      background-image:
+        linear-gradient(rgba(255,255,255,.07) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.07) 1px, transparent 1px);
+      background-size: 48px 48px;
+      mask-image: linear-gradient(to bottom, black, transparent 72%);
+    }
+
+    .glass {
+      background: linear-gradient(135deg, rgba(255,255,255,.13), rgba(255,255,255,.06));
+      border: 1px solid var(--stroke);
+      box-shadow: 0 20px 70px rgba(0, 0, 0, .18);
+      backdrop-filter: blur(22px);
+    }
+
+    .noise::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      opacity: .35;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 250 250' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='.16'/%3E%3C/svg%3E");
+      mix-blend-mode: overlay;
+    }
+
+    .text-gradient {
+      background: linear-gradient(90deg, #22d3ee 0%, #7c3aed 48%, #ec4899 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .btn-primary {
+      position: relative;
+      overflow: hidden;
+      isolation: isolate;
+      background: linear-gradient(135deg, #22d3ee, #2563eb 45%, #7c3aed);
+    }
+
+    .btn-primary::before {
+      content: '';
+      position: absolute;
+      inset: -2px;
+      z-index: -1;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,.42), transparent);
+      transform: translateX(-120%);
+      transition: transform .75s ease;
+    }
+
+    .btn-primary:hover::before {
+      transform: translateX(120%);
+    }
+
+    .orb {
+      position: absolute;
+      border-radius: 999px;
+      filter: blur(2px);
+      opacity: .95;
+      animation: float 7s ease-in-out infinite;
+    }
+
+    .orb:nth-child(2) { animation-delay: -2s; }
+    .orb:nth-child(3) { animation-delay: -4s; }
+
+    @keyframes float {
+      0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+      50% { transform: translate3d(12px, -18px, 0) scale(1.04); }
+    }
+
+    @keyframes fadeOutUp {
+      0% { transform: translateY(0); opacity: 1; visibility: visible; }
+      80% { transform: translateY(-100%); opacity: 1; }
+      100% { transform: translateY(-100%); opacity: 0; visibility: hidden; }
+    }
+
+    @keyframes pulseLogo {
+      0%, 100% { opacity: .78; transform: scale(.98); }
+      50% { opacity: 1; transform: scale(1); }
+    }
+
+    @keyframes phoneFloat {
+      0%, 100% { transform: translateY(0) rotate(-2deg); }
+      50% { transform: translateY(-12px) rotate(1.5deg); }
+    }
+
+    @keyframes marquee {
+      from { transform: translateX(0); }
+      to { transform: translateX(-50%); }
+    }
+
+    .intro-screen {
+      animation: fadeOutUp 1.1s cubic-bezier(.85, 0, .15, 1) forwards;
+      animation-delay: 1.25s;
+    }
+
+    .pulse-logo {
+      animation: pulseLogo 1.25s ease-in-out infinite;
+    }
+
+    .phone-float {
+      animation: phoneFloat 6s ease-in-out infinite;
+    }
+
+    .marquee-track {
+      width: max-content;
+      animation: marquee 28s linear infinite;
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(26px);
+      transition: opacity .75s ease, transform .75s ease;
+    }
+
+    .reveal.is-visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .mobile-menu {
+      display: grid;
+      grid-template-rows: 0fr;
+      transition: grid-template-rows .28s ease;
+    }
+
+    .mobile-menu.open {
+      grid-template-rows: 1fr;
+    }
+
+    .mobile-menu > div {
+      overflow: hidden;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: .01ms !important;
+        animation-iteration-count: 1 !important;
+        scroll-behavior: auto !important;
+        transition-duration: .01ms !important;
+      }
+    }
+  </style>
 </head>
 
-<body class="text-slate-800 font-sans antialiased bg-[#f8fafc] selection:bg-blue-500 selection:text-white">
-
-    <div class="intro-screen fixed inset-0 z-[100] bg-white flex flex-col items-center justify-center pointer-events-none">
-        <div class="text-center pulse-logo flex flex-col items-center">
-            
-            <div class="mb-4">
-                <img src="img/logo.png" alt="Daty Logo" class="h-32 w-auto object-contain mx-auto mb-3 fallback-hidden" onerror="this.style.display='none'">
-                
-                <div class="text-5xl font-black tracking-widest text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-indigo-600 to-fuchsia-600 font-sans">
-                    DATY
-                </div>
-            </div>
-
-            <p class="text-xs uppercase tracking-[0.3em] text-slate-400 font-bold">Iniciando Aventura</p>
-        </div>
+<body class="font-sans antialiased selection:bg-brand-cyan selection:text-night">
+  <!-- Pantalla de entrada -->
+  <div class="intro-screen fixed inset-0 z-[100] flex items-center justify-center bg-night pointer-events-none">
+    <div class="pulse-logo text-center">
+      <img src="img/logo.png" alt="Logo de Daty" class="mx-auto mb-5 h-24 w-auto object-contain" onerror="this.style.display='none'" />
+      <p class="text-5xl font-black tracking-[.18em] text-white">DATY</p>
+      <p class="mt-3 text-xs font-bold uppercase tracking-[.45em] text-cyan-200">Conecta tu grupo</p>
     </div>
+  </div>
 
+  <!-- Header -->
+  <header class="fixed left-0 right-0 top-0 z-50 px-4 py-4 sm:px-6">
+    <div class="mx-auto max-w-7xl rounded-3xl border border-white/15 bg-night/70 shadow-soft backdrop-blur-2xl">
+      <nav class="flex items-center justify-between px-4 py-3 sm:px-6" aria-label="Navegación principal">
+        <a href="#home" class="flex items-center gap-3" aria-label="Ir al inicio">
+          <img src="img/logo.png" alt="Daty" class="h-12 w-auto object-contain" onerror="this.style.display='none'" />
+          <span class="text-2xl font-black tracking-tight text-white">D<span class="text-brand-cyan">A</span>TY</span>
+        </a>
 
-    <div class="fixed w-full top-0 left-0 z-50 px-4 sm:px-6 py-4">
-        <nav class="max-w-7xl mx-auto bg-white/75 backdrop-blur-xl border border-slate-200/50 rounded-2xl shadow-md shadow-slate-100/40 px-6 py-3 flex justify-between items-center transition-all duration-300">
-            
-            <a href="#" class="flex items-center gap-3 group">
-                <img src="img/logo.png" alt="Daty Logo" class="h-16 w-auto object-contain" onerror="this.style.display='none'">
-                <span class="text-2xl font-black tracking-tight text-slate-900 group-hover:opacity-80 transition">
-                    D<span class="text-blue-600">A</span>TY
-                </span>
+        <div class="hidden items-center gap-8 text-sm font-semibold text-slate-300 lg:flex">
+          <a href="#about" class="transition hover:text-white">Concepto</a>
+          <a href="#groups" class="transition hover:text-white">Grupos</a>
+          <a href="#features" class="transition hover:text-white">Funciones</a>
+          <a href="#gallery" class="transition hover:text-white">Interfaz</a>
+        </div>
+
+        <div class="hidden items-center gap-3 lg:flex">
+          <a href="#download" class="rounded-2xl bg-white px-5 py-2.5 text-sm font-black text-night transition hover:-translate-y-0.5 hover:bg-cyan-100">
+            Descargar APK
+          </a>
+        </div>
+
+        <button id="menuButton" class="inline-flex h-11 w-11 items-center justify-center rounded-2xl border border-white/15 text-white lg:hidden" aria-label="Abrir menú" aria-expanded="false">
+          <svg id="menuIcon" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M4 7h16M4 12h16M4 17h16" />
+          </svg>
+        </button>
+      </nav>
+
+      <div id="mobileMenu" class="mobile-menu lg:hidden">
+        <div>
+          <div class="grid gap-2 px-4 pb-4 text-sm font-bold text-slate-200">
+            <a href="#about" class="rounded-2xl px-4 py-3 transition hover:bg-white/10">Concepto</a>
+            <a href="#groups" class="rounded-2xl px-4 py-3 transition hover:bg-white/10">Grupos</a>
+            <a href="#features" class="rounded-2xl px-4 py-3 transition hover:bg-white/10">Funciones</a>
+            <a href="#gallery" class="rounded-2xl px-4 py-3 transition hover:bg-white/10">Interfaz</a>
+            <a href="#download" class="mt-2 rounded-2xl bg-white px-4 py-3 text-center font-black text-night">Descargar APK</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main id="home">
+    <!-- Hero -->
+    <section class="relative isolate overflow-hidden px-4 pb-20 pt-36 sm:px-6 lg:pb-28 lg:pt-40">
+      <div class="absolute inset-0 -z-10 overflow-hidden">
+        <div class="absolute left-[6%] top-32 h-72 w-72 rounded-full bg-brand-violet/25 blur-3xl"></div>
+        <div class="absolute right-[8%] top-20 h-72 w-72 rounded-full bg-brand-cyan/20 blur-3xl"></div>
+        <div class="absolute bottom-0 left-1/2 h-80 w-80 -translate-x-1/2 rounded-full bg-brand-pink/10 blur-3xl"></div>
+      </div>
+
+      <div class="mx-auto grid max-w-7xl items-center gap-14 lg:grid-cols-[1.05fr_.95fr]">
+        <div class="reveal text-center lg:text-left">
+          <div class="mx-auto inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-4 py-2 text-xs font-extrabold uppercase tracking-[.18em] text-cyan-100 backdrop-blur lg:mx-0">
+            <span class="h-2 w-2 rounded-full bg-brand-lime"></span>
+            App de actividades sociales
+          </div>
+
+          <h1 class="mt-7 max-w-4xl text-5xl font-black leading-[.98] tracking-[-.05em] text-white sm:text-6xl lg:text-7xl xl:text-8xl">
+            Convierte cada salida en una
+            <span class="text-gradient">misión de grupo.</span>
+          </h1>
+
+          <p class="mx-auto mt-6 max-w-2xl text-base leading-8 text-slate-300 sm:text-lg lg:mx-0">
+            Daty reúne amigos, parejas y squads en retos presenciales, rutas urbanas y dinámicas rápidas para volver a vivir experiencias reales fuera del celular.
+          </p>
+
+          <div class="mt-9 flex flex-col justify-center gap-4 sm:flex-row lg:justify-start">
+            <a href="#download" class="btn-primary rounded-2xl px-8 py-4 text-center text-sm font-black uppercase tracking-wide text-white shadow-glow transition hover:-translate-y-1">
+              Obtener APK
             </a>
-
-            <nav class="hidden md:flex items-center gap-8 text-sm font-bold text-slate-600">
-                <a href="#about" class="relative py-1 hover:text-blue-600 transition-colors group/link">
-                    Concepto
-                    <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-blue-600 to-indigo-600 transition-all duration-300 group-hover/link:w-full"></span>
-                </a>
-                <a href="#features" class="relative py-1 hover:text-blue-600 transition-colors group/link">
-                    Modalidades
-                    <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-blue-600 to-indigo-600 transition-all duration-300 group-hover/link:w-full"></span>
-                </a>
-                <a href="#gallery" class="relative py-1 hover:text-blue-600 transition-colors group/link">
-                    Interfaz
-                    <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-blue-600 to-indigo-600 transition-all duration-300 group-hover/link:w-full"></span>
-                </a>
-            </nav>
-
-            <!-- BOTÓN DE ACCIÓN -->
-            <a href="#download"
-               class="bg-slate-900 hover:bg-blue-600 text-white px-5 py-2.5 rounded-xl text-xs sm:text-sm font-extrabold tracking-wide transition-all duration-300 shadow-sm hover:shadow-lg hover:shadow-blue-600/20 transform hover:-translate-y-0.5">
-                DESCARGAR
+            <a href="#groups" class="rounded-2xl border border-white/15 bg-white/10 px-8 py-4 text-center text-sm font-black uppercase tracking-wide text-white backdrop-blur transition hover:-translate-y-1 hover:bg-white/15">
+              Ver modos grupales
             </a>
+          </div>
 
-        </nav>
-    </div>
-
-    <section class="min-h-screen flex flex-col justify-center relative overflow-hidden pt-28 lg:pt-20 pb-12 bg-gradient-to-b from-blue-50/30 via-transparent to-transparent">
-    <!-- Manchas de color difuminadas -->
-    <div class="absolute top-1/4 -left-20 w-96 h-96 bg-blue-400/10 rounded-full blur-[100px] pointer-events-none"></div>
-    <div class="absolute bottom-1/4 -right-20 w-96 h-96 bg-fuchsia-400/10 rounded-full blur-[100px] pointer-events-none"></div>
-
-    <div class="max-w-7xl mx-auto px-6 w-full relative z-10">
-        <div class="grid lg:grid-cols-12 gap-12 items-center">
-
-            <!-- Texto Principal (7 columnas) -->
-            <div class="lg:col-span-7 text-center lg:text-left flex flex-col items-center lg:items-start">  
-
-                <h1 class="mt-6 text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black text-slate-900 tracking-tight leading-[1.1] sm:leading-none">
-                    El mundo real 
-                    <span class="block lg:inline">es tu nuevo</span> 
-                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-indigo-600 to-fuchsia-600 glow-text-blue block lg:inline">
-                        tablero.
-                    </span>
-                </h1>
-
-                <p class="mt-6 text-base md:text-lg text-slate-600 leading-relaxed max-w-xl font-normal">
-                    Daty transforma la rutina de la ciudad en misiones interactivas. Completa retos presenciales de forma individual, en pareja o con amigos, y vuelve a conectar cara a cara.
-                </p>
-
-                <div class="flex flex-col sm:flex-row justify-center lg:justify-start gap-4 mt-8 w-full sm:w-auto">
-                    <a href="#download"
-                       class="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-xl font-bold tracking-wide transition-all duration-300 shadow-lg shadow-blue-600/20 text-center">
-                        OBTENER APK
-                    </a>
-                    <a href="#features"
-                       class="bg-white border border-slate-200 text-slate-700 hover:text-slate-900 hover:border-slate-300 px-8 py-4 rounded-xl font-bold tracking-wide transition-all shadow-sm text-center">
-                        EXPLORAR MODOS
-                    </a>
-                </div>
+          <div class="mt-10 grid grid-cols-3 gap-3 sm:max-w-xl">
+            <div class="glass rounded-3xl p-4 text-center">
+              <p class="text-2xl font-black text-white">3</p>
+              <p class="mt-1 text-xs font-bold uppercase tracking-wide text-slate-300">Modos</p>
             </div>
-
-            <!-- Celular Estático (5 columnas) -->
-            <div class="lg:col-span-5 flex justify-center lg:justify-end w-full">
-                <div class="bg-white border border-slate-200/80 rounded-[2.5rem] p-3 shadow-xl relative w-full max-w-[270px] sm:max-w-[290px]">
-                    <div class="rounded-[2.2rem] overflow-hidden border border-slate-100">
-                        <img
-                            src="img/inicio.png"
-                            alt="Daty App UI"
-                            class="w-full h-auto block"
-                        >
-                    </div>
-                </div>
+            <div class="glass rounded-3xl p-4 text-center">
+              <p class="text-2xl font-black text-white">+XP</p>
+              <p class="mt-1 text-xs font-bold uppercase tracking-wide text-slate-300">Progreso</p>
             </div>
-
+            <div class="glass rounded-3xl p-4 text-center">
+              <p class="text-2xl font-black text-white">24/7</p>
+              <p class="mt-1 text-xs font-bold uppercase tracking-wide text-slate-300">Retos</p>
+            </div>
+          </div>
         </div>
-    </div>
-</section>
 
+        <div class="reveal relative mx-auto w-full max-w-md lg:max-w-lg">
+          <div class="orb left-2 top-20 h-16 w-16 bg-brand-cyan/80"></div>
+          <div class="orb right-3 top-12 h-12 w-12 bg-brand-pink/80"></div>
+          <div class="orb bottom-20 left-14 h-10 w-10 bg-brand-lime/80"></div>
 
-    <section id="about" class="py-24 bg-white border-y border-slate-200/60">
-        <div class="max-w-4xl mx-auto px-6">
-            <div class="grid md:grid-cols-3 gap-8 items-baseline">
-                <div class="md:col-span-1">
-                    <h2 class="text-xs uppercase tracking-[0.2em] text-slate-400 font-bold">Misión / 01</h2>
-                    <p class="text-3xl font-black text-slate-900 mt-1">¿Qué es Daty?</p>
-                    <div class="w-12 h-1 bg-blue-600 mt-3 rounded-full"></div>
-                </div>
-                <div class="md:col-span-2 text-slate-600 text-base md:text-lg leading-relaxed space-y-4">
-                    <p>
-                        Diseñamos Daty para refrescar las interacciones de la era móvil. No queremos que te quedes estático frente a un feed, usamos la tecnología para activar tus salidas al mundo real.
-                    </p>
-                    <p class="text-slate-700 font-medium">
-                        A través de retos divertidos y dinámicas casuales, creamos experiencias físicas organizadas bajo tres pilares de comunidad: <span class="text-blue-600 font-semibold">Solo</span>, <span class="text-fuchsia-600 font-semibold">Duo</span> y <span class="text-emerald-600 font-semibold">Squad</span>.
-                    </p>
-                </div>
+          <div class="relative mx-auto w-[280px] sm:w-[320px]">
+            <div class="phone-float relative rounded-[3.2rem] border border-white/20 bg-white/10 p-3 shadow-card backdrop-blur-2xl">
+              <div class="absolute left-1/2 top-5 z-10 h-6 w-28 -translate-x-1/2 rounded-full bg-night/80"></div>
+              <div class="overflow-hidden rounded-[2.7rem] border border-white/10 bg-night">
+                <img src="img/inicio.png" alt="Pantalla principal de Daty" class="block h-auto w-full" />
+              </div>
             </div>
+
+            <div class="absolute -left-12 top-24 hidden rounded-3xl border border-white/15 bg-white/10 p-4 shadow-soft backdrop-blur-xl sm:block">
+              <div class="flex -space-x-3">
+                <span class="grid h-10 w-10 place-items-center rounded-full bg-cyan-300 text-sm font-black text-night ring-4 ring-night">A</span>
+                <span class="grid h-10 w-10 place-items-center rounded-full bg-violet-300 text-sm font-black text-night ring-4 ring-night">M</span>
+                <span class="grid h-10 w-10 place-items-center rounded-full bg-pink-300 text-sm font-black text-night ring-4 ring-night">+</span>
+              </div>
+              <p class="mt-3 text-xs font-black uppercase tracking-wide text-white">Squad listo</p>
+            </div>
+
+            <div class="absolute -right-10 bottom-24 hidden rounded-3xl border border-white/15 bg-white/10 p-4 shadow-soft backdrop-blur-xl sm:block">
+              <p class="text-xs font-bold uppercase tracking-wide text-slate-300">Reto activo</p>
+              <p class="mt-1 text-lg font-black text-white">Ruta urbana</p>
+            </div>
+          </div>
         </div>
+      </div>
     </section>
 
-
-    <section id="features" class="py-28">
-        <div class="max-w-7xl mx-auto px-6">
-            
-            <div class="flex flex-col md:flex-row md:items-end justify-between mb-16">
-                <div>
-                    <h2 class="text-xs font-bold uppercase tracking-[0.15em] text-blue-600">Mecánicas de la app</h2>
-                    <p class="text-4xl font-black text-slate-900 mt-1">Sistemas de Experiencia</p>
-                </div>
-                <p class="text-slate-500 max-w-xs text-sm mt-4 md:mt-0">Elige tu formato preferido, acumula puntos y desbloquea recompensas locales.</p>
-            </div>
-
-            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-
-                <div class="bg-white border border-slate-200/70 p-8 rounded-2xl hover:border-blue-500/50 transition-all duration-300 shadow-sm group">
-                    <div class="text-xs font-bold text-blue-600 mb-4 bg-blue-50 inline-block px-2.5 py-1 rounded-md">MODO 01</div>
-                    <h3 class="font-bold text-slate-900 text-xl tracking-tight mb-2 group-hover:text-blue-600 transition-colors">
-                        Aventuras
-                    </h3>
-                    <p class="text-slate-600 text-sm leading-relaxed font-light">
-                        Exploraciones dinámicas en tu entorno. Resuelve misterios de localización urbana y rompe la rutina diaria de forma interactiva.
-                    </p>
-                </div>
-
-                <div class="bg-white border border-slate-200/70 p-8 rounded-2xl hover:border-fuchsia-500/50 transition-all duration-300 shadow-sm group">
-                    <div class="text-xs font-bold text-fuchsia-600 mb-4 bg-fuchsia-50 inline-block px-2.5 py-1 rounded-md">MODO 02</div>
-                    <h3 class="font-bold text-slate-900 text-xl tracking-tight mb-2 group-hover:text-fuchsia-600 transition-colors">
-                        Modo Pareja
-                    </h3>
-                    <p class="text-slate-600 text-sm leading-relaxed font-light">
-                        Conexión segura mediante código único. Compartan retos divertidos y coleccionen recuerdos en su bitácora digital compartida.
-                    </p>
-                </div>
-
-                <div class="bg-white border border-slate-200/70 p-8 rounded-2xl hover:border-emerald-500/50 transition-all duration-300 shadow-sm group">
-                    <div class="text-xs font-bold text-emerald-600 mb-4 bg-emerald-50 inline-block px-2.5 py-1 rounded-md">MODO 03</div>
-                    <h3 class="font-bold text-slate-900 text-xl tracking-tight mb-2 group-hover:text-emerald-400 transition-colors">
-                        Modo Grupal
-                    </h3>
-                    <p class="text-slate-600 text-sm leading-relaxed font-light">
-                        Actividades sincronizadas en tiempo real. Crea salas privadas con tus amigos o únete a retos zonales abiertos los fines de semana.
-                    </p>
-                </div>
-
-                <div class="bg-white border border-slate-200/70 p-8 rounded-2xl hover:border-indigo-500/50 transition-all duration-300 shadow-sm group">
-                    <div class="text-xs font-bold text-indigo-600 mb-4 bg-indigo-50 inline-block px-2.5 py-1 rounded-md">SISTEMA 04</div>
-                    <h3 class="font-bold text-slate-900 text-xl tracking-tight mb-2 group-hover:text-indigo-600 transition-colors">
-                        Progreso
-                    </h3>
-                    <p class="text-slate-600 text-sm leading-relaxed font-light">
-                        Tu actividad presencial te otorga experiencia real. Colecciona insignias temáticas y destaca en el ranking de tu zona.
-                    </p>
-                </div>
-
-            </div>
-        </div>
+    <!-- Banda de etiquetas -->
+    <section class="overflow-hidden border-y border-white/10 bg-white/[.06] py-4 backdrop-blur-xl">
+      <div class="marquee-track flex gap-4 text-sm font-black uppercase tracking-[.18em] text-slate-200">
+        <span class="px-4">Retos presenciales</span><span class="text-brand-cyan">•</span>
+        <span class="px-4">Amigos</span><span class="text-brand-pink">•</span>
+        <span class="px-4">Parejas</span><span class="text-brand-lime">•</span>
+        <span class="px-4">Squads</span><span class="text-brand-violet">•</span>
+        <span class="px-4">Mapas</span><span class="text-brand-cyan">•</span>
+        <span class="px-4">Insignias</span><span class="text-brand-pink">•</span>
+        <span class="px-4">Retos presenciales</span><span class="text-brand-cyan">•</span>
+        <span class="px-4">Amigos</span><span class="text-brand-pink">•</span>
+        <span class="px-4">Parejas</span><span class="text-brand-lime">•</span>
+        <span class="px-4">Squads</span><span class="text-brand-violet">•</span>
+        <span class="px-4">Mapas</span><span class="text-brand-cyan">•</span>
+        <span class="px-4">Insignias</span><span class="text-brand-pink">•</span>
+      </div>
     </section>
 
-
-    <section id="gallery" class="py-24 bg-white border-t border-slate-200/60">
-        <div class="max-w-7xl mx-auto px-6">
-
-            <div class="text-center mb-16">
-                <h2 class="text-xs font-bold uppercase tracking-[0.15em] text-blue-600">Visualización</h2>
-                <p class="text-4xl font-black text-slate-900 mt-1">Vistazo a la Aplicación</p>
-            </div>
-
-            <div class="grid sm:grid-cols-2 md:grid-cols-3 gap-8 max-w-4xl mx-auto">
-                <div class="bg-slate-50 p-2 rounded-2xl border border-slate-200/60 shadow-sm">
-                    <img src="img/mapa.png" class="rounded-xl w-full h-auto" alt="Captura Daty 1">
-                </div>
-                <div class="bg-slate-50 p-2 rounded-2xl border border-slate-200/60 shadow-sm">
-                    <img src="img/lista.png" class="rounded-xl w-full h-auto" alt="Captura Daty 2">
-                </div>
-                <div class="bg-slate-50 p-2 rounded-2xl border border-slate-200/60 shadow-sm sm:col-span-2 md:col-span-1">
-                    <img src="img/galeria.png" class="rounded-xl w-full h-auto mx-auto max-w-[280px] md:max-w-full" alt="Captura Daty 3">
-                </div>
-            </div>
-
-        </div>
-    </section>
-
-
-    <section id="download" class="py-24 relative">
-        <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(37,99,235,0.04),transparent_60%)]"></div>
-        
-        <div class="max-w-4xl mx-auto px-6 relative z-10">
-            <div class="bg-gradient-to-b from-white to-[#f1f5f9] border border-slate-200 p-12 md:p-16 rounded-[2rem] text-center shadow-md">
-                
-                <h2 class="text-3xl md:text-5xl font-black text-slate-900 tracking-tight">
-                    Inicia la aventura
-                </h2>
-                
-                <p class="mt-4 text-slate-600 max-w-md mx-auto text-sm md:text-base">
-                    Únete a la versión alfa abierta. Descarga el instalador APK limpio y comienza a acumular experiencia hoy mismo.
-                </p>
-
-                <div class="mt-8">
-                    <a
-                    href="https://github.com/Darklife22/Daty-landing/releases/download/v1.0.0/daty.apk"
-                    target="_blank"
-                    class="inline-block bg-blue-600 hover:bg-blue-700 text-white px-10 py-4 rounded-xl font-bold"
-                    >
-                        DESCARGAR APK
-                    </a>
-                </div>
-                
-            </div>
-        </div>
-    </section>
-
-
-    <footer class="py-12 bg-slate-900 text-slate-400 text-center text-xs tracking-wide">
-        <div class="max-w-7xl mx-auto px-6 space-y-2">
-            <p class="font-bold text-slate-300">
-                © 2026 DATY — PROYECTO DE PROGRAMACIÓN MÓVIL
+    <!-- About -->
+    <section id="about" class="bg-slate-50 px-4 py-24 text-night sm:px-6">
+      <div class="mx-auto max-w-7xl">
+        <div class="reveal grid gap-10 lg:grid-cols-[.8fr_1.2fr] lg:items-end">
+          <div>
+            <p class="text-sm font-black uppercase tracking-[.22em] text-brand-violet">Concepto</p>
+            <h2 class="mt-3 text-4xl font-black tracking-[-.04em] text-night sm:text-5xl">Una app pensada para salir, jugar y conectar.</h2>
+          </div>
+          <div class="rounded-[2rem] border border-slate-200 bg-white p-6 shadow-soft sm:p-8">
+            <p class="text-lg leading-8 text-slate-600">
+              Daty transforma la rutina en actividades reales: eliges una dinámica, formas tu grupo y completas misiones en distintos lugares. La idea no es quedarte mirando una pantalla, sino usarla como punto de partida para crear momentos con otras personas.
             </p>
-            <p class="text-slate-500 font-medium">
-                Desarrollado con Flutter & Firebase Core
-            </p>
+          </div>
         </div>
-    </footer>
 
+        <div class="mt-14 grid gap-5 md:grid-cols-3">
+          <article class="reveal rounded-[2rem] border border-slate-200 bg-white p-7 shadow-soft transition hover:-translate-y-2 hover:shadow-card">
+            <div class="mb-6 grid h-14 w-14 place-items-center rounded-2xl bg-cyan-100 text-2xl">🧭</div>
+            <h3 class="text-xl font-black text-night">Explora</h3>
+            <p class="mt-3 leading-7 text-slate-600">Encuentra retos, rutas y actividades cercanas con una experiencia visual clara.</p>
+          </article>
+
+          <article class="reveal rounded-[2rem] border border-slate-200 bg-white p-7 shadow-soft transition hover:-translate-y-2 hover:shadow-card">
+            <div class="mb-6 grid h-14 w-14 place-items-center rounded-2xl bg-violet-100 text-2xl">🤝</div>
+            <h3 class="text-xl font-black text-night">Forma equipo</h3>
+            <p class="mt-3 leading-7 text-slate-600">Crea salas para amigos, conecta en pareja o participa en actividades grupales.</p>
+          </article>
+
+          <article class="reveal rounded-[2rem] border border-slate-200 bg-white p-7 shadow-soft transition hover:-translate-y-2 hover:shadow-card">
+            <div class="mb-6 grid h-14 w-14 place-items-center rounded-2xl bg-pink-100 text-2xl">🏆</div>
+            <h3 class="text-xl font-black text-night">Gana progreso</h3>
+            <p class="mt-3 leading-7 text-slate-600">Suma experiencia, desbloquea insignias y guarda recuerdos de cada salida.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Grupos -->
+    <section id="groups" class="relative overflow-hidden bg-white px-4 py-24 text-night sm:px-6">
+      <div class="absolute left-0 top-20 h-80 w-80 rounded-full bg-cyan-200/40 blur-3xl"></div>
+      <div class="absolute bottom-10 right-0 h-80 w-80 rounded-full bg-violet-200/40 blur-3xl"></div>
+
+      <div class="relative mx-auto max-w-7xl">
+        <div class="reveal mx-auto max-w-3xl text-center">
+          <p class="text-sm font-black uppercase tracking-[.22em] text-brand-blue">Temática de grupo </p>
+          <h2 class="mt-3 text-4xl font-black tracking-[-.04em] text-night sm:text-5xl">Cada actividad tiene su propio modo social.</h2>
+          <p class="mt-5 text-lg leading-8 text-slate-600">Diseñado para que las actividades se sientan vivas, comunitarias y fáciles de entender.</p>
+        </div>
+
+        <div class="mt-14 grid gap-6 lg:grid-cols-3">
+          <article class="reveal group relative overflow-hidden rounded-[2.5rem] bg-night p-8 text-white shadow-card transition hover:-translate-y-2">
+            <div class="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(34,211,238,.38),transparent_45%)]"></div>
+            <div class="relative">
+              <span class="rounded-full bg-white/10 px-4 py-2 text-xs font-black uppercase tracking-[.18em] text-cyan-100">Modo solo</span>
+              <h3 class="mt-8 text-3xl font-black">Aventura personal</h3>
+              <p class="mt-4 leading-7 text-slate-300">Retos individuales para explorar lugares, cumplir misiones rápidas y avanzar a tu ritmo.</p>
+              <div class="mt-8 flex items-center justify-between rounded-3xl bg-white/10 p-4">
+                <span class="text-sm font-bold text-slate-300">Ideal para</span>
+                <span class="text-sm font-black text-white">Explorar</span>
+              </div>
+            </div>
+          </article>
+
+          <article class="reveal group relative overflow-hidden rounded-[2.5rem] bg-night p-8 text-white shadow-card transition hover:-translate-y-2">
+            <div class="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(236,72,153,.38),transparent_45%)]"></div>
+            <div class="relative">
+              <span class="rounded-full bg-white/10 px-4 py-2 text-xs font-black uppercase tracking-[.18em] text-pink-100">Modo duo</span>
+              <h3 class="mt-8 text-3xl font-black">Conexión en pareja</h3>
+              <p class="mt-4 leading-7 text-slate-300">Actividades compartidas con códigos, recuerdos y retos pensados para dos personas.</p>
+              <div class="mt-8 flex items-center justify-between rounded-3xl bg-white/10 p-4">
+                <span class="text-sm font-bold text-slate-300">Ideal para</span>
+                <span class="text-sm font-black text-white">Compartir</span>
+              </div>
+            </div>
+          </article>
+
+          <article class="reveal group relative overflow-hidden rounded-[2.5rem] bg-night p-8 text-white shadow-card transition hover:-translate-y-2">
+            <div class="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(163,230,53,.32),transparent_45%)]"></div>
+            <div class="relative">
+              <span class="rounded-full bg-white/10 px-4 py-2 text-xs font-black uppercase tracking-[.18em] text-lime-100">Modo squad</span>
+              <h3 class="mt-8 text-3xl font-black">Misiones grupales</h3>
+              <p class="mt-4 leading-7 text-slate-300">Salas privadas, retos en equipo y dinámicas para que todo el grupo participe.</p>
+              <div class="mt-8 flex items-center justify-between rounded-3xl bg-white/10 p-4">
+                <span class="text-sm font-bold text-slate-300">Ideal para</span>
+                <span class="text-sm font-black text-white">Competir</span>
+              </div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Funciones -->
+    <section id="features" class="bg-slate-50 px-4 py-24 text-night sm:px-6">
+      <div class="mx-auto max-w-7xl">
+        <div class="reveal flex flex-col justify-between gap-6 lg:flex-row lg:items-end">
+          <div class="max-w-2xl">
+            <p class="text-sm font-black uppercase tracking-[.22em] text-brand-pink">Funciones</p>
+            <h2 class="mt-3 text-4xl font-black tracking-[-.04em] text-night sm:text-5xl">Todo lo necesario para que una salida se sienta como juego.</h2>
+          </div>
+        </div>
+
+        <div class="mt-14 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+          <article class="reveal rounded-[2rem] border border-slate-200 bg-white p-6 shadow-soft">
+            <div class="mb-5 flex h-12 w-12 items-center justify-center rounded-2xl bg-cyan-100 text-xl">📍</div>
+            <h3 class="font-black text-night">Mapa interactivo</h3>
+            <p class="mt-3 text-sm leading-6 text-slate-600">Ubica actividades y puntos de encuentro de forma rápida.</p>
+          </article>
+
+          <article class="reveal rounded-[2rem] border border-slate-200 bg-white p-6 shadow-soft">
+            <div class="mb-5 flex h-12 w-12 items-center justify-center rounded-2xl bg-violet-100 text-xl">🎯</div>
+            <h3 class="font-black text-night">Retos dinámicos</h3>
+            <p class="mt-3 text-sm leading-6 text-slate-600">Misiones cortas que motivan a moverse, participar y completar objetivos.</p>
+          </article>
+
+          <article class="reveal rounded-[2rem] border border-slate-200 bg-white p-6 shadow-soft">
+            <div class="mb-5 flex h-12 w-12 items-center justify-center rounded-2xl bg-pink-100 text-xl">👥</div>
+            <h3 class="font-black text-night">Salas de grupo</h3>
+            <p class="mt-3 text-sm leading-6 text-slate-600">Organiza actividades con amigos mediante códigos o invitaciones.</p>
+          </article>
+
+          <article class="reveal rounded-[2rem] border border-slate-200 bg-white p-6 shadow-soft">
+            <div class="mb-5 flex h-12 w-12 items-center justify-center rounded-2xl bg-lime-100 text-xl">⭐</div>
+            <h3 class="font-black text-night">Insignias y XP</h3>
+            <p class="mt-3 text-sm leading-6 text-slate-600">Premia la participación con progreso, logros y ranking local.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Cómo funciona -->
+    <section class="bg-white px-4 py-24 text-night sm:px-6">
+      <div class="mx-auto grid max-w-7xl gap-10 lg:grid-cols-[.9fr_1.1fr] lg:items-center">
+        <div class="reveal">
+          <p class="text-sm font-black uppercase tracking-[.22em] text-brand-violet">Flujo</p>
+          <h2 class="mt-3 text-4xl font-black tracking-[-.04em] text-night sm:text-5xl">De abrir la app a vivir la actividad.</h2>
+        </div>
+
+        <div class="grid gap-4">
+          <div class="reveal flex gap-5 rounded-[2rem] border border-slate-200 bg-slate-50 p-6">
+            <span class="grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-night text-lg font-black text-white">1</span>
+            <div>
+              <h3 class="text-lg font-black text-night">Elige una actividad</h3>
+              <p class="mt-2 leading-7 text-slate-600">Selecciona una aventura, una dinámica en pareja o una misión grupal.</p>
+            </div>
+          </div>
+
+          <div class="reveal flex gap-5 rounded-[2rem] border border-slate-200 bg-slate-50 p-6">
+            <span class="grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-night text-lg font-black text-white">2</span>
+            <div>
+              <h3 class="text-lg font-black text-night">Invita a tu grupo</h3>
+              <p class="mt-2 leading-7 text-slate-600">Comparte una sala, organiza el punto de encuentro y sincroniza el reto.</p>
+            </div>
+          </div>
+
+          <div class="reveal flex gap-5 rounded-[2rem] border border-slate-200 bg-slate-50 p-6">
+            <span class="grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-night text-lg font-black text-white">3</span>
+            <div>
+              <h3 class="text-lg font-black text-night">Completa la misión</h3>
+              <p class="mt-2 leading-7 text-slate-600">Participen, acumulen XP y guarden la experiencia en su historial.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Galería -->
+    <section id="gallery" class="bg-slate-50 px-4 py-24 text-night sm:px-6">
+      <div class="mx-auto max-w-7xl">
+        <div class="reveal mx-auto max-w-3xl text-center">
+          <p class="text-sm font-black uppercase tracking-[.22em] text-brand-blue">Interfaz</p>
+        </div>
+
+        <div class="mt-14 grid gap-6 md:grid-cols-3">
+          <figure class="reveal rounded-[2.5rem] border border-slate-200 bg-white p-3 shadow-soft transition hover:-translate-y-2 hover:shadow-card">
+            <img src="img/mapa.png" alt="Vista de mapa en Daty" class="h-auto w-full rounded-[2rem]" />
+            <figcaption class="px-4 py-5 text-sm font-bold text-slate-500">Mapa de actividades</figcaption>
+          </figure>
+
+          <figure class="reveal rounded-[2.5rem] border border-slate-200 bg-white p-3 shadow-soft transition hover:-translate-y-2 hover:shadow-card">
+            <img src="img/lista.png" alt="Lista de actividades en Daty" class="h-auto w-full rounded-[2rem]" />
+            <figcaption class="px-4 py-5 text-sm font-bold text-slate-500">Lista de retos</figcaption>
+          </figure>
+
+          <figure class="reveal rounded-[2.5rem] border border-slate-200 bg-white p-3 shadow-soft transition hover:-translate-y-2 hover:shadow-card">
+            <img src="img/galeria.png" alt="Galería de recuerdos en Daty" class="mx-auto h-auto w-full max-w-[290px] rounded-[2rem] md:max-w-none" />
+            <figcaption class="px-4 py-5 text-sm font-bold text-slate-500">Recuerdos y progreso</figcaption>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <section id="download" class="relative overflow-hidden bg-night px-4 py-24 text-white sm:px-6">
+      <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(34,211,238,.20),transparent_42%)]"></div>
+      <div class="absolute -left-24 top-10 h-72 w-72 rounded-full bg-brand-violet/30 blur-3xl"></div>
+      <div class="absolute -right-24 bottom-10 h-72 w-72 rounded-full bg-brand-pink/25 blur-3xl"></div>
+
+      <div class="reveal noise relative mx-auto max-w-5xl overflow-hidden rounded-[3rem] border border-white/15 bg-white/10 p-8 text-center shadow-card backdrop-blur-2xl sm:p-12 lg:p-16">
+        <p class="text-sm font-black uppercase tracking-[.24em] text-cyan-100">Descargar APK</p>
+        <h2 class="mx-auto mt-4 max-w-3xl text-4xl font-black tracking-[-.04em] text-white sm:text-6xl">Empieza a crear recuerdos con tu grupo.</h2>
+        <p class="mx-auto mt-5 max-w-2xl text-lg leading-8 text-slate-300">Descarga el APK de Daty</p>
+
+        <div class="mt-9 flex flex-col items-center justify-center gap-4 sm:flex-row">
+          <a href="https://github.com/Darklife22/Daty-landing/releases/download/v1.0.0/daty.apk" target="_blank" rel="noopener noreferrer" class="btn-primary rounded-2xl px-10 py-4 text-sm font-black uppercase tracking-wide text-white shadow-glow transition hover:-translate-y-1">
+            Descargar APK
+          </a>
+          <a href="#home" class="rounded-2xl border border-white/15 bg-white/10 px-10 py-4 text-sm font-black uppercase tracking-wide text-white transition hover:bg-white/15">
+            Volver arriba
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="bg-[#060b14] px-4 py-10 text-center text-sm text-slate-500 sm:px-6">
+    <div class="mx-auto flex max-w-7xl flex-col items-center justify-between gap-5 md:flex-row">
+      <a href="#home" class="flex items-center gap-3">
+        <img src="img/logo.png" alt="Logo Daty" class="h-10 w-auto object-contain" onerror="this.style.display='none'" />
+        <span class="text-xl font-black text-white">DATY</span>
+      </a>
+      <p class="font-semibold">© 2026 DATY</p>
+      <p class="font-semibold text-slate-600">Flutter · Firebase · Actividades sociales</p>
+    </div>
+  </footer>
+
+  <script>
+    const menuButton = document.getElementById('menuButton');
+    const mobileMenu = document.getElementById('mobileMenu');
+    const mobileLinks = mobileMenu.querySelectorAll('a');
+
+    menuButton.addEventListener('click', () => {
+      const isOpen = mobileMenu.classList.toggle('open');
+      menuButton.setAttribute('aria-expanded', String(isOpen));
+    });
+
+    mobileLinks.forEach((link) => {
+      link.addEventListener('click', () => {
+        mobileMenu.classList.remove('open');
+        menuButton.setAttribute('aria-expanded', 'false');
+      });
+    });
+
+    const revealElements = document.querySelectorAll('.reveal');
+
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-visible');
+          revealObserver.unobserve(entry.target);
+        }
+      });
+    }, {
+      threshold: 0.16,
+      rootMargin: '0px 0px -60px 0px',
+    });
+
+    revealElements.forEach((element, index) => {
+      element.style.transitionDelay = `${Math.min(index * 55, 260)}ms`;
+      revealObserver.observe(element);
+    });
+  </script>
 </body>
 </html>
